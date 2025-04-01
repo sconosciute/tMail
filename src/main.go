@@ -11,7 +11,7 @@ import (
 
 func main() {
 	styles.InitDefaultTheme()
-	Controller := gui.New()
+	Controller := gui.NewGui()
 	file, err := tea.LogToFile("debug.log", "debug")
 	if err != nil {
 		fmt.Println("Fatal error: ", err)

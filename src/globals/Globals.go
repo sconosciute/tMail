@@ -1,8 +1,6 @@
-package gui
+package globals
 
 import tea "github.com/charmbracelet/bubbletea"
-
-type Bubble = tea.Model
 
 type NavMsg struct {
 	Msg string
@@ -12,51 +10,55 @@ func (n NavMsg) String() string {
 	return n.Msg
 }
 
+//region navigationDefaults
+
 const (
-	navUp    = "up"
-	navDown  = "down"
-	navLeft  = "left"
-	navRight = "right"
-	navEnter = "enter"
-	navBack  = "back"
-	navQuit  = "quit"
+	NavUp    = "up"
+	NavDown  = "down"
+	NavLeft  = "left"
+	NavRight = "right"
+	NavEnter = "enter"
+	NavBack  = "back"
+	NavQuit  = "quit"
 )
 
 var DefaultKeyBinds = map[string]tea.Cmd{
 	"w": func() tea.Msg {
-		return NavMsg{navUp}
+		return NavMsg{NavUp}
 	},
 	"up": func() tea.Msg {
-		return NavMsg{navUp}
+		return NavMsg{NavUp}
 	},
 	"a": func() tea.Msg {
-		return NavMsg{navLeft}
+		return NavMsg{NavLeft}
 	},
 	"left": func() tea.Msg {
-		return NavMsg{navLeft}
+		return NavMsg{NavLeft}
 	},
 	"s": func() tea.Msg {
-		return NavMsg{navDown}
+		return NavMsg{NavDown}
 	},
 	"down": func() tea.Msg {
-		return NavMsg{navDown}
+		return NavMsg{NavDown}
 	},
 	"d": func() tea.Msg {
-		return NavMsg{navRight}
+		return NavMsg{NavRight}
 	},
 	"right": func() tea.Msg {
-		return NavMsg{navRight}
+		return NavMsg{NavRight}
 	},
 	"enter": func() tea.Msg {
-		return NavMsg{navEnter}
+		return NavMsg{NavEnter}
 	},
 	"esc": func() tea.Msg {
-		return NavMsg{navBack}
+		return NavMsg{NavBack}
 	},
 	"q": func() tea.Msg {
-		return NavMsg{navQuit}
+		return NavMsg{NavQuit}
 	},
 	"ctrl+c": func() tea.Msg {
-		return NavMsg{navQuit}
+		return NavMsg{NavQuit}
 	},
 }
+
+//endregion

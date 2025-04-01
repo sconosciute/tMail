@@ -3,13 +3,21 @@ package gui
 import (
 	tea "github.com/charmbracelet/bubbletea"
 	"log"
+	"tMail/src/globals"
 	"tMail/src/gui/components"
 )
 
 type Controller struct {
-	views         []Bubble
-	currentView   Bubble
+	views         []tea.Model
+	currentView   tea.Model
 	currentKeyMap map[string]tea.Cmd
+}
+
+func NewGui() *Controller {
+	return &Controller{
+		currentView:   components.NewURLChecker(),
+		currentKeyMap: globals.DefaultKeyBinds,
+	}
 }
 
 func (c Controller) Init() tea.Cmd {
@@ -19,29 +27,23 @@ func (c Controller) Init() tea.Cmd {
 
 func (c Controller) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	var cmd tea.Cmd
-	switch msg := msg.(type) {
+	var fwd = msg
+	switch msg.(type) {
 	case tea.KeyMsg:
-		var navCmd = c.currentKeyMap[msg.String()]()
-		if m, ok := navCmd.(NavMsg); ok {
-			if m.String() == navQuit {
+		msgStr := msg.(tea.KeyMsg).String()
+		if nav, ok := c.currentKeyMap[msgStr]; ok {
+			log.Printf("Intercepted Key Message: %s\n	Converted to: %s", msgStr, nav())
+			if nav().(globals.NavMsg).String() == globals.NavQuit {
 				return c, tea.Quit
+			} else {
+				fwd = nav()
 			}
-		} else {
-			_, cmd = c.currentView.Update(c.currentKeyMap[msg.String()])
 		}
-	default:
-		_, cmd = c.currentView.Update(msg)
 	}
+	c.currentView, cmd = c.currentView.Update(fwd)
 	return c, cmd
 }
 
 func (c Controller) View() string {
 	return c.currentView.View()
-}
-
-func New() *Controller {
-	return &Controller{
-		currentView:   components.URLChecker{},
-		currentKeyMap: DefaultKeyBinds,
-	}
 }
